@@ -2,7 +2,7 @@
 body {
     font-family: 'Raleway', sans-serif;
 }
-.grid-container {
+.board {
     display: grid;
     grid-template:1fr 1fr 1fr / 1fr 1fr 1fr;
     width: clamp(50px, 75vmin, 800px);
@@ -12,7 +12,7 @@ body {
     gap: 1px;
 }
 
-.cell {
+.board > * {
     background-color: rgb(255, 255, 255);
     text-align: center;
     font-size: 15vmin;
@@ -20,4 +20,86 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+#start-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(189, 35, 150, 0.8);
+    gap: 48px;
+}
+
+.hidden{
+    scale: 0;
+}
+
+#menu-players {
+    display: flex;
+    width: clamp(0px, 90vw, 2000px);
+    justify-content: space-around;
+    height: 60%;
+
+}
+
+#menu-players > div {
+    width: 30%;
+    border: 0px solid black;
+    border-radius: 0px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 4vh;
+    text-align: center;
+    font-size: 3vmin;
+}
+
+#menu-players > div >p:first-child {
+    font-size: 6vmin;
+}
+
+#menu-players > div >p:nth-child(2) {
+}
+
+.player-name {
+    width: 80%;
+    border: none;
+    border-radius: 999px;
+    height: 3vh;
+    background-color:rgba(189, 35, 150, 0.8);
+}
+
+#menu-players > div > div > p {
+    margin: 4px;
+}
+
+.mark-buttons {
+    display: flex;
+    width: 100%;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.mark-buttons > button {
+    font-size: 200%;
+    flex: 1;
+    border: none;
+    background-color:rgba(189, 35, 150, 0.8);
+    font-family: inherit;
+}
+
+.start {
+    border: none;
+    width: clamp(40px, 40vw, 600px);
+    height: clamp(40px, 10vh, 100px);
+    font-size: 250%;
+    font-family: inherit;
+    border-radius: 999px;
+    background-color:rgba(189, 35, 150, 0.8);
 }
