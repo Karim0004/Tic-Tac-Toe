@@ -39,7 +39,7 @@ const game = (() => {
     
     // takes a cell and plays a turn then switches current player for next turn //
     const turn = (cell) => {
-        if (playing) {
+        if (playing && (gameboard.getBoard())[cell] === null) {
             gameboard.insert(players[currentPlayer].symbol, cell);
             displayController.updateBoard();
             checkWin(players[currentPlayer].symbol, cell);

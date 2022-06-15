@@ -34,6 +34,7 @@ button {
     align-items: center;
     justify-content: center;
     transition: all 0.4s ease-in-out;
+    user-select: none;
 }
 
 #start-menu {
@@ -49,6 +50,7 @@ button {
     background-color: var(--backdrop);
     gap: 48px;
     transition: all 0.2s ease-in;
+    z-index: 2;
 }
 
 #menu-players {
@@ -142,15 +144,6 @@ button.selected-mark {
     transform: translateY(2px);
 }
 
-.hidden{
-    transform: scale(0);
-}
-
-#winning-screen,
-#start-menu {
-    z-index: 1;
-}
-
 .winning-cell {
     transform:translateY(-10px);
     background-color: var(--color1);
@@ -163,11 +156,16 @@ button.selected-mark {
     left: 0;
     height: 100vh;
     width: 100vw;
-    transition: all 0.2s ease-in;
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 1;
 
+}
+
+#winning-screen,
+#start-menu {
+    transition: all 0.2s ease-in 0.6s;
 }
 
 .winning-menu {
@@ -200,4 +198,9 @@ button.selected-mark {
     background-color:var(--color1);
     transition: all 0.1s ease-in-out;
 
+}
+
+.hidden{
+    transform: scale(0);
+    opacity: 0;
 }
