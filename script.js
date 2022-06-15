@@ -45,31 +45,68 @@ const game = (() => {
 
 
 // module for viewing the board and getting player input through cell clicks //
-const displayController = ((gameboard) => {
+const displayController = (() => {
     
-    let displayCells = document.querySelectorAll('.board > *');
-    
+    let boardCells = document.querySelectorAll('.board > *');
+    let winningScreen = document.getElementById('winning-screen');
+    let startMenu = document.getElementById('start-menu');
+
     // listening for clicks on cells //
-    displayCells.forEach((element) => {
+    boardCells.forEach((element) => {
         element.addEventListener('click', (e) => {
             game.turn(Number(e.target.id));
             updateBoard();
         })
     })
 
+
     let updateBoard = () => {
         const board = gameboard.getBoard()
         for (let i in board) {
-            displayCells[i].textContent = board[i];
+            boardCells[i].textContent = board[i];
         }
     }
 
-    return {updateBoard};
-})(gameboard);
+    let displayBoard = () => {
+        if (!startMenu.classList.contains('hidden')) {
+            startMenu.classList.add('hidden');
+        }
+        if (!winningScreen.classList.contains('hidden')) {
+            winningScreen.classList.add('hidden');
+        }
+    }
+
+    let displayWinner = () => {
+        if (!startMenu.classList.contains('hidden')) {
+            startMenu.classList.add('hidden');
+        }
+        if (winningScreen.classList.contains('hidden')) {
+            winningScreen.classList.remove('hidden');
+        }
+    }
+
+    let displayMenu = () => {
+        if (startMenu.classList.contains('hidden')) {
+            startMenu.classList.remove('hidden');
+        }
+        if (!winningScreen.classList.contains('hidden')) {
+            winningScreen.classList.add('hidden');
+        }
+    }
 
 
-const player = (name, symbol) => {
-    if (!['X', 'O'].includes(symbol)) return console.log('ERORR: bad symbol');
-    return {name, symbol};
-}
+    return {updateBoard, displayBoard, displayMenu, displayWinner};
+})();
 
+
+// const player = (name, symbol) => {
+//     if (!['X', 'O'].includes(symbol)) return console.log('ERORR: bad symbol');
+//     return {name, symbol};
+// }
+
+// let buttons = document.querySelectorAll('.mark-buttons > button');
+// buttons.forEach((button) => {
+//     button.addEventListener('click', (e) => {
+//         e.target.classList.add('selected-mark');
+//     })
+// })
