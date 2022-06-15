@@ -33,6 +33,7 @@ const game = (() => {
         players[1] = player2;
         playing = true;
         currentPlayer = 0;
+        displayController.updateBoard();
         displayController.displayBoard();
     }
     
@@ -85,12 +86,19 @@ const game = (() => {
 const displayController = (() => {
     
     const boardCells = document.querySelectorAll('.board > *');
+
+    // winning screen elements
     const winningScreen = document.getElementById('winning-screen');
     const winningText = document.querySelector('.winning-text');
+    const playAgain = document.querySelector('.winning-menu>button:first-of-type');
+    const menuReturn = document.querySelector('.winning-menu>button:last-of-type');
+
+    // start menu elements
     const startMenu = document.getElementById('start-menu');
     const markButtons = document.querySelectorAll('.mark-buttons > button');
     const startButton = document.getElementById('start');
     const Names = document.querySelectorAll('.player-name');
+
 
     // listening for clicks on cells //
     boardCells.forEach((element) => {
@@ -115,7 +123,7 @@ const displayController = (() => {
         })
     })
 
-    // update the board from the gameboard object to the DOM //
+    // update the board //
     const updateBoard = () => {
         const board = gameboard.getBoard()
         for (let i in board) {
@@ -123,16 +131,15 @@ const displayController = (() => {
         }
     }
 
-    // starting the game by clicking on the play button //
-    startButton.addEventListener('click', () => {
+    // initiates the game //
+    startGame = () => {
         if (markButtons[1].classList.contains('selected-mark')
         || markButtons[2].classList.contains('selected-mark')) {
             game.start(player(Names[0].value, 'O'), player(Names[1].value, 'X'));
         } else {
             game.start(player(Names[0].value, 'X'), player(Names[1].value, 'O'));
         }
-    })
-
+    }
 
     // methods for displaying game states //
     const displayBoard = () => {
@@ -172,8 +179,16 @@ const displayController = (() => {
         if (!winningScreen.classList.contains('hidden')) {
             winningScreen.classList.add('hidden');
         }
+
+        // clearing menu //
+        Names.forEach((name) => name.value = '');
+        markButtons.forEach((b) => b.classList.remove('selected-mark'));
     }
 
+    // binding buttons //
+    startButton.addEventListener('click', startGame);
+    playAgain.addEventListener('click', startGame);
+    menuReturn.addEventListener('click', displayMenu);
 
     return {updateBoard, displayBoard, displayMenu, displayWinner};
 })();
