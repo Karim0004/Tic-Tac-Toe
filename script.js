@@ -2,7 +2,7 @@ const gameboard = (() => {
     let board = [null,null,null,null,null,null,null,null,null];
 
     // insert a symbol to the board //
-    let insert = (symbol, index) => {
+    const insert = (symbol, index) => {
         // error checking index number and symbol //
         if (![0,1,2,3,4,5,6,7,8].includes(index)) return console.log('ERROR: bad index');
         if (!['X', 'O'].includes(symbol)) return console.log('ERROR: bad symbol');
@@ -10,11 +10,11 @@ const gameboard = (() => {
         board[index] = symbol;
     }
 
-    let clear = () => {
+    const clear = () => {
         board.fill(null, 0);
     }
 
-    let getBoard = () => board;
+    const getBoard = () => board;
 
     return {insert, clear, getBoard};
 })();
@@ -27,24 +27,55 @@ const game = (() => {
     let playing = false;
 
     // starts the game //
-    let start = (player1, player2) => {
+    const start = (player1, player2) => {
         gameboard.clear();
         players[0] = player1;
         players[1] = player2;
         playing = true;
+        currentPlayer = 0;
         displayController.displayBoard();
     }
     
     // takes a cell and plays a turn then switches current player for next turn //
-    let turn = (cell) => {
+    const turn = (cell) => {
         if (playing) {
             gameboard.insert(players[currentPlayer].symbol, cell);
-            (currentPlayer === 0) ? currentPlayer = 1 : currentPlayer = 0;
             displayController.updateBoard();
-
-            // TODO check if a player won //
+            checkWin(players[currentPlayer].symbol, cell);
+            (currentPlayer === 0) ? currentPlayer = 1 : currentPlayer = 0;
         }
     } 
+
+
+    // checks if a 3 in a row pattern is presesnt to declare a winner //
+    const winningPatterns = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7],
+    [2,5,8], [0,4,8], [2,4,6]];
+    const checkWin = (symbol, cell) => {
+        
+        const board = gameboard.getBoard();
+        let winningCells = [];
+
+        // only select the winning patterns that include the cell that was played //
+        let possibleWins = winningPatterns.filter((pattern) => {
+            return pattern.includes(cell);
+        });
+
+        // checking if a winning pattern exists on the board //
+        for (let pw of possibleWins) {
+            if (board[pw[0]] === symbol && board[pw[1]] === symbol
+                && board[pw[2]] === symbol) {
+                    winningCells = pw;
+                    break;
+                }
+        }
+
+        // if a player won, set playing state to false and view winning screen //
+        if (winningCells.length > 0) {
+            playing = false;
+            displayController.displayWinner(winningCells, players[currentPlayer].name);
+        }
+
+    }
 
     return {start, turn};
 })();
@@ -53,12 +84,13 @@ const game = (() => {
 // module for viewing the board and getting player input through cell clicks //
 const displayController = (() => {
     
-    let boardCells = document.querySelectorAll('.board > *');
-    let winningScreen = document.getElementById('winning-screen');
-    let startMenu = document.getElementById('start-menu');
-    let markButtons = document.querySelectorAll('.mark-buttons > button');
-    let startButton = document.getElementById('start');
-    let Names = document.querySelectorAll('.player-name');
+    const boardCells = document.querySelectorAll('.board > *');
+    const winningScreen = document.getElementById('winning-screen');
+    const winningText = document.querySelector('.winning-text');
+    const startMenu = document.getElementById('start-menu');
+    const markButtons = document.querySelectorAll('.mark-buttons > button');
+    const startButton = document.getElementById('start');
+    const Names = document.querySelectorAll('.player-name');
 
     // listening for clicks on cells //
     boardCells.forEach((element) => {
@@ -84,7 +116,7 @@ const displayController = (() => {
     })
 
     // update the board from the gameboard object to the DOM //
-    let updateBoard = () => {
+    const updateBoard = () => {
         const board = gameboard.getBoard()
         for (let i in board) {
             boardCells[i].textContent = board[i];
@@ -103,25 +135,37 @@ const displayController = (() => {
 
 
     // methods for displaying game states //
-    let displayBoard = () => {
+    const displayBoard = () => {
         if (!startMenu.classList.contains('hidden')) {
             startMenu.classList.add('hidden');
         }
         if (!winningScreen.classList.contains('hidden')) {
             winningScreen.classList.add('hidden');
         }
+
+        // clear winning class off cells //
+        boardCells.forEach((cell) => {
+            if (cell.classList.contains('winning-cell')) {
+                cell.classList.remove('winning-cell');
+            }
+        })
     }
 
-    let displayWinner = () => {
+    const displayWinner = (winningCells, name) => {
         if (!startMenu.classList.contains('hidden')) {
             startMenu.classList.add('hidden');
         }
         if (winningScreen.classList.contains('hidden')) {
             winningScreen.classList.remove('hidden');
         }
+
+        // highlight the winning cells //
+        for (n of winningCells) boardCells[n].classList.add('winning-cell');
+        // display winner's name //
+        winningText.textContent = `${name} Won The Game!`;
     }
 
-    let displayMenu = () => {
+    const displayMenu = () => {
         if (startMenu.classList.contains('hidden')) {
             startMenu.classList.remove('hidden');
         }

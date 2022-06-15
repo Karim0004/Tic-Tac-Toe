@@ -4,11 +4,16 @@
     --color1: #fe9898;
     --color2: #f98d8d;
     --color3: #f57171;
-    --backdrop: rgba(250,250,250,0.8)
+    --backdrop: rgba(250,250,250,0.8);
 }
 
 body {
     font-family: 'Raleway', sans-serif;
+}
+
+button {
+    color: #ffffff;
+    text-shadow: 0 0 2px #ffffff;
 }
 .board {
     display: grid;
@@ -28,7 +33,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.4s ease-in-out;
 }
 
 #start-menu {
@@ -43,6 +48,7 @@ body {
     justify-content: center;
     background-color: var(--backdrop);
     gap: 48px;
+    transition: all 0.2s ease-in;
 }
 
 #menu-players {
@@ -119,12 +125,14 @@ body {
     transition: all 0.1s ease-in-out;
 }
 
-button#start:active {
+button#start:active,
+#winning-screen button:active {
     background-color: var(--color3);
 }
 
 #start:hover,
-.mark-buttons > button:hover:not(.selected-mark) {
+.mark-buttons > button:hover:not(.selected-mark),
+.winning-menu > button:hover {
     transform:translateY(2px);
     background-color: var(--color2);
 }
@@ -134,6 +142,20 @@ button.selected-mark {
     transform: translateY(2px);
 }
 
+.hidden{
+    transform: scale(0);
+}
+
+#winning-screen,
+#start-menu {
+    z-index: 1;
+}
+
+.winning-cell {
+    transform:translateY(-10px);
+    background-color: var(--color1);
+}
+
 #winning-screen {
     background-color: var(--backdrop);
     position: fixed;
@@ -141,13 +163,41 @@ button.selected-mark {
     left: 0;
     height: 100vh;
     width: 100vw;
-}
-
-.hidden{
-    transform: scale(0);
-}
-
-#winning-screen,
-#start-menu {
     transition: all 0.2s ease-in;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.winning-menu {
+    display: grid;
+    grid-template: 50% 50% / 1fr 1fr;
+    align-items: center;
+    justify-items: center;
+    gap: 20px;
+    width: clamp(100px, 70%, 600px);
+    height: clamp(100px, 40%, 300px);
+    text-align: center;
+    font-size: clamp(12px, 4vmin, 40px);
+}
+
+.winning-text {
+    grid-column: 1 / -1;
+    font-weight: bold;
+    text-shadow: 0px 0px 2px var(--color1);
+    color: var(--color3);
+
+}
+
+.winning-menu > button {
+    border: none;
+    width: 100%;
+    height: clamp(20px, 10vh, 80px);
+    font-size: inherit;
+    font-family: inherit;
+    border-radius: 999px;
+    background-color:var(--color1);
+    transition: all 0.1s ease-in-out;
+
 }
