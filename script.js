@@ -76,10 +76,10 @@ const game = (() => {
         // if a player won, set playing state to false and view winning screen //
         if (winningCells.length > 0) {
             playing = false;
-            displayController.displayWinner(winningCells, players[currentPlayer].name);
+            displayController.displayWinner(winningCells, `${players[currentPlayer].name} Won The Game!`);
         } else if (turnsPlayed > 8) {
             playing = false;
-            displayController.displayWinner([0, 1, 2, 3, 4, 5, 6, 7, 8], "Draw!");
+            displayController.displayWinner([0, 1, 2, 3, 4, 5, 6, 7, 8], "Draw!);
         }
 
     }
@@ -164,7 +164,7 @@ const displayController = (() => {
         })
     }
 
-    const displayWinner = (winningCells, name) => {
+    const displayWinner = (winningCells, text) => {
         if (!startMenu.classList.contains('hidden')) {
             startMenu.classList.add('hidden');
         }
@@ -175,7 +175,7 @@ const displayController = (() => {
         // highlight the winning cells //
         for (n of winningCells) boardCells[n].classList.add('winning-cell');
         // display winner's name //
-        winningText.textContent = `${name} Won The Game!`;
+        winningText.textContent = text;
     }
 
     const displayMenu = () => {
