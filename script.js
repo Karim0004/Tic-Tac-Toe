@@ -25,6 +25,7 @@ const game = (() => {
     const players = [null, null];
     let currentPlayer = 0;
     let playing = false;
+    let turnsPlayed = 0;
 
     // starts the game //
     const start = (player1, player2) => {
@@ -33,6 +34,7 @@ const game = (() => {
         players[1] = player2;
         playing = true;
         currentPlayer = 0;
+        turnsPlayed = 0;
         displayController.updateBoard();
         displayController.displayBoard();
     }
@@ -41,6 +43,7 @@ const game = (() => {
     const turn = (cell) => {
         if (playing && (gameboard.getBoard())[cell] === null) {
             gameboard.insert(players[currentPlayer].symbol, cell);
+            turnsPlayed += 1;
             displayController.updateBoard();
             checkWin(players[currentPlayer].symbol, cell);
             (currentPlayer === 0) ? currentPlayer = 1 : currentPlayer = 0;
@@ -74,6 +77,9 @@ const game = (() => {
         if (winningCells.length > 0) {
             playing = false;
             displayController.displayWinner(winningCells, players[currentPlayer].name);
+        } else if (turnsPlayed > 8) {
+            playing = false;
+            displayController.displayWinner([0, 1, 2, 3, 4, 5, 6, 7, 8], "Draw!");
         }
 
     }
